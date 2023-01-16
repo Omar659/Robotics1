@@ -1,4 +1,14 @@
 function b_T_a = inverse_T(a_T_b)
+    % inverse_T - Compute the inverse of the homogeneous transformation matrix
+    %
+    % b_T_a = inverse_T(a_T_b)
+    %
+    % input:
+    %   a_T_b - A 4x4 homogeneous transformation matrix
+    %
+    % output:
+    %   b_T_a - The 4x4 inverse matrix of a_T_b
+
     a_R_b = a_T_b(1:3,1:3);
     b_R_a = a_R_b';
     a_p_ab = a_T_b(1:3, 4);
