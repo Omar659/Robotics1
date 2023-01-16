@@ -1,7 +1,0 @@
-function [sol1, sol2] = angles_from_RPY(R)
-    theta1 = atan2(-Rrpy(3,1), sqrt(Rrpy(3,2)^2 + Rrpy(3,3)^2));
-    theta2 = atan2(-Rrpy(3,1), -sqrt(Rrpy(3,2)^2 + Rrpy(3,3)^2));
-    phi = atan2(Rrpy(2,1)/cos(theta), Rrpy(1,1)/cos(theta));
-    psi = atan2(Rrpy(3,2)/cos(theta), Rrpy(3,3)/cos(theta));   
-    R = R3 * R2 * R1;
-end
