@@ -13,7 +13,7 @@ v = Rzxz * v_p;
 v = subs(v, {'phi','theta','psi'}, {pi, -pi/2, 0});
 disp(v)
 Rzxz = subs(Rzxz, {'phi','theta','psi'}, {pi, -pi/2, 0});
-theta = simplify(atan2(sqrt(Rzxz(3,1)2 + Rzxz(3,2)^2), Rzxz(3,3)));
+theta = simplify(atan2(sqrt(Rzxz(3,1)^2 + Rzxz(3,2)^2), Rzxz(3,3)));
 phi = simplify(atan2(Rzxz(1,3)/sin(theta), -Rzxz(2,3)/sin(theta)));
 psi = simplify(atan2(Rzxz(3,1)/sin(theta), Rzxz(3,2)/sin(theta)));
 display(theta)
@@ -27,4 +27,7 @@ R = subs(R, {'phi','theta','psi'}, {-pi/2, pi, 0});
 disp(sol1)
 disp(sol2)
 
-% disp(homn)
+a_T_b = homogeneous_T(rotation_around_r([0 0 1], sym("theta")), [1;1;1]);
+disp(a_T_b)
+b_T_a = inverse_T(a_T_b);
+disp(b_T_a)
