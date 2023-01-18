@@ -13,12 +13,12 @@ A_04 = A_01 * A_12 * A_23 * A_34;
 disp(simplify(A_04))
 
 
-A_01 = dh_matrix(pi/2, 0, 0, sym('q1'));
-A_12 = dh_matrix(-pi/2, 0, 0, sym('q2'));
-A_23 = dh_matrix(-pi/2, 0, sym('L'), sym('q3'));
-A_34 = dh_matrix(pi/2, 0, 0, sym('q4'));
-A_45 = dh_matrix(pi/2, 0, sym('M'), sym('q5'));
-A_56 = dh_matrix(-pi/2, 0, 0, sym('q6'));
+A_01 = dh_matrix(0, pi/2, 0, sym('q1'));
+A_12 = dh_matrix(0, -pi/2, 0, sym('q2'));
+A_23 = dh_matrix(0, -pi/2, sym('L'), sym('q3'));
+A_34 = dh_matrix(0, pi/2, 0, sym('q4'));
+A_45 = dh_matrix(0, pi/2, sym('M'), sym('q5'));
+A_56 = dh_matrix(0, -pi/2, 0, sym('q6'));
 A_67 = dh_matrix(0, 0, 0, sym('q7'));
 
 A_07 = A_01 * A_12 * A_23 * A_34 * A_45 * A_56 * A_67;
