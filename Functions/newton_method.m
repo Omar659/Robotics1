@@ -1,4 +1,4 @@
-function newton_method(fr, q_0, r_d, q, k, eps, eps_q, q_des, sing_closeness)
+function newton_method(fr, q_0, r_d, q, k, eps, eps_q, q_des, sing_closeness, fig_speed)
     % angles_from_RPY - return the angle theta (pitch), phi (roll) and 
     % psi (yaw) from a Roll-Pitch-Yaw rotation matrix R
     %
@@ -51,17 +51,24 @@ function newton_method(fr, q_0, r_d, q, k, eps, eps_q, q_des, sing_closeness)
         disp(q_k)
     end
         
-    plot_errs_joints(norm_error_history, 0.1, 'Newton method', 'norm of Cartesian position error [m]', 1)
+    subplot(2,4,1);
+    plot_errs_joints(norm_error_history, fig_speed, 'Newton method', 'norm of Cartesian position error [m]')
 
-    plot_errs_joints(error_history(1,:), 0.1, 'Newton method', 'ex [m]', 2)
+    subplot(2,4,2);
+    plot_errs_joints(error_history(1,:), fig_speed, 'Newton method', 'ex [m]')
 
-    plot_errs_joints(error_history(2,:), 0.1, 'Newton method', 'ey [m]', 3)
+    subplot(2,4,3);
+    plot_errs_joints(error_history(2,:), fig_speed, 'Newton method', 'ey [m]')
 
-    plot_errs_joints(error_history(3,:), 0.1, 'Newton method', 'ez [m]', 4)
+    subplot(2,4,4);
+    plot_errs_joints(error_history(3,:), fig_speed, 'Newton method', 'ez [m]')
 
-    plot_errs_joints(q_history(1,:), 0.1, 'Newton method', 'q1 [rad]', 5, q_des)
+    subplot(2,4,5);
+    plot_errs_joints(q_history(1,:), fig_speed, 'Newton method', 'q1 [rad]', q_des)
 
-    plot_errs_joints(q_history(2,:), 0.1, 'Newton method', 'q2 [rad]', 6, q_des)
+    subplot(2,4,6);
+    plot_errs_joints(q_history(2,:), fig_speed, 'Newton method', 'q2 [rad]', q_des)
 
-    plot_errs_joints(q_history(3,:), 0.1, 'Newton method', 'q3 [rad]', 7, q_des)
+    subplot(2,4,7);
+    plot_errs_joints(q_history(3,:), fig_speed, 'Newton method', 'q3 [rad]', q_des)
 end
