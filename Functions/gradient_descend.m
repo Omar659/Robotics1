@@ -1,15 +1,22 @@
 function gradient_descend(fr, q_0, r_d, q, alpha, k, eps, eps_q, q_des, fig_speed)
-    % angles_from_RPY - return the angle theta (pitch), phi (roll) and 
-    % psi (yaw) from a Roll-Pitch-Yaw rotation matrix R
+    % gradient_descend - Compute the Gradient Descent method to reach a
+    % specific desired configuration
     %
-    % sintax: [sol1, sol2] = angles_from_RPY(R)
+    % sintax: gradient_descend(fr, q_0, r_d, q, alpha, k, eps, eps_q, q_des, fig_speed)
     %
     % input:
+    %   fr - Cartesian position of the EE in symbols
+    %   q_0 - Initial configuration
+    %   r_d - Desired cartesian position of the EE
+    %   q - Vector of symbols of the configuration
+    %   alpha - Step size
+    %   k - Max iteration
+    %   eps - Used as stopping criteria. If the cartesian error is lower
+    %   than 10^-eps the algorithm stop with a success
+    %   eps_q - Used as stopping criteria. If the cartesian error is lower
+    %   than 10^-eps the algorithm stop with a success
     %   R - Roll-Pitch-Yaw rotation matrix R
-    %
-    % output:
-    %   [sol1, sol2] - The two solutione since the atan2 function of theta
-    %   take as cos a plus/manus value, resulting in two output
+    %   R - Roll-Pitch-Yaw rotation matrix R
     disp('GRADIENT DESCEND')
     q_k = q_0;
     q_history = [];
