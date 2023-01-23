@@ -1,7 +1,9 @@
 clear all
+close all
 clc
 
-addpath("Functions\")
+addpath("Functions/") % Linux
+% addpath("Functions\") % Windows
 
 
 A_01 = dh_matrix(0, sym('a1'), sym('d1'), sym('q1'));

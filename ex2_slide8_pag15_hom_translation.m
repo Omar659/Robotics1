@@ -1,7 +1,10 @@
 clear all
+close all
 clc
 
-addpath('Functions\')
+addpath("Functions/") % Linux
+% addpath("Functions\") % Windows
+
 q_a = [pi/3;-pi/2];
 w_p_a = [-2.5; 1; 0];
 w_p_b = [1; 2; 0];

@@ -1,7 +1,9 @@
 clear all
+close all
 clc
 
-addpath("Functions\")
+addpath("Functions/") % Linux
+% addpath("Functions\") % Windows
 
 disp("EXERCISE slide 8 pag 14")
 disp("The robot carries a depth camera (e.g., a Kinect) on the end-effector")

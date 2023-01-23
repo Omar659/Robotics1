@@ -1,7 +1,9 @@
 clear all
+close all
 clc
 
-addpath("Functions\")
+addpath("Functions/") % Linux
+% addpath("Functions\") % Windows
 
 w_R_zxz = euler_RPY([0 0 1], [1 0 0], [0 0 1], sym("phi"), sym("theta"), sym("psi"), true);
 disp("Rotation matrix with moving axis around Z -> X' -> Z''")

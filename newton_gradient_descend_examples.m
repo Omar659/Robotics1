@@ -2,7 +2,9 @@ clear all
 close all
 clc
 
-addpath("Functions\")
+addpath("Functions/") % Linux
+% addpath("Functions\") % Windows
+
 syms q1 q2 q3 px py pz real
 
 d1 = 0.5;
