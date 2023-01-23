@@ -60,11 +60,11 @@ function gradient_descend(fr, q_0, r_d, q, alpha, k, eps, eps_q, q_des, fig_spee
     plot_errs_joints(error_history(3,:), fig_speed, strcat('Gradient method with constant step=', num2str(alpha)), 'ez [m]')
 
     subplot(2,4,5);
-    plot_errs_joints(q_history(1,:), fig_speed, strcat('Gradient method with constant step=', num2str(alpha)), 'q1 [rad]', q_des)
+    plot_errs_joints(q_history(1,:), fig_speed, strcat('Gradient method with constant step=', num2str(alpha)), 'q1 [rad]', q_des, 1)
 
     subplot(2,4,6);
-    plot_errs_joints(q_history(2,:), fig_speed, strcat('Gradient method with constant step=', num2str(alpha)), 'q2 [rad]', q_des)
+    plot_errs_joints(q_history(2,:), fig_speed, strcat('Gradient method with constant step=', num2str(alpha)), 'q2 [rad]', q_des, 2)
 
     subplot(2,4,7);
-    plot_errs_joints(q_history(3,:), fig_speed, strcat('Gradient method with constant step=', num2str(alpha)), 'q3 [rad]', q_des)
+    plot_errs_joints(q_history(3,:), fig_speed, strcat('Gradient method with constant step=', num2str(alpha)), 'q3 [rad]', q_des, 3)
 end
