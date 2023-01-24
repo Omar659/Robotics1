@@ -1,15 +1,28 @@
-function newton_method(fr, q_0, r_d, q, k, eps, eps_q, q_des, sing_closeness, fig_speed)
-    % angles_from_RPY - return the angle theta (pitch), phi (roll) and 
-    % psi (yaw) from a Roll-Pitch-Yaw rotation matrix R
+function q_history = newton_method(fr, q_0, r_d, q, k, eps, eps_q, q_des, sing_closeness, fig_speed)
+    % newton_method - Compute the Newton method to reach a specific 
+    % desired configuration
     %
-    % sintax: [sol1, sol2] = angles_from_RPY(R)
+    % sintax: q_history = newton_method(fr, q_0, r_d, q, k, eps, eps_q, q_des, sing_closeness, fig_speed)
     %
     % input:
-    %   R - Roll-Pitch-Yaw rotation matrix R
+    %   fr - Cartesian position of the EE in symbols
+    %   q_0 - Initial configuration
+    %   r_d - Desired cartesian position of the EE
+    %   q - Vector of symbols of the configuration
+    %   alpha - Step size
+    %   k - Max iteration
+    %   eps - Used as stopping criteria. If the cartesian error is lower
+    %   than 10^-eps the algorithm stop with a success
+    %   eps_q - Used as stopping criteria. If the cartesian error is lower
+    %   than 10^-eps the algorithm stop with a success
+    %   q_des - desired configuration
+    %   sing_closness - Used as stopping criteria. If the determinant is lower
+    %   than 10^-sing_closness the algorithm stop with a failure
+    %   fig_speed - amimation speed
     %
     % output:
-    %   [sol1, sol2] - The two solutione since the atan2 function of theta
-    %   take as cos a plus/manus value, resulting in two output
+    %   q_history - All configuration during the algorithm
+    
     disp('NEWTON METHOD')
     q_k = q_0;
     q_history = [];

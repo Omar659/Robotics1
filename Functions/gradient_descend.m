@@ -1,4 +1,4 @@
-function gradient_descend(fr, q_0, r_d, q, alpha, k, eps, eps_q, q_des, fig_speed)
+function q_history = gradient_descend(fr, q_0, r_d, q, alpha, k, eps, eps_q, q_des, fig_speed)
     % gradient_descend - Compute the Gradient Descent method to reach a
     % specific desired configuration
     %
@@ -15,8 +15,11 @@ function gradient_descend(fr, q_0, r_d, q, alpha, k, eps, eps_q, q_des, fig_spee
     %   than 10^-eps the algorithm stop with a success
     %   eps_q - Used as stopping criteria. If the cartesian error is lower
     %   than 10^-eps the algorithm stop with a success
-    %   R - Roll-Pitch-Yaw rotation matrix R
-    %   R - Roll-Pitch-Yaw rotation matrix R
+    %   q_des - desired configuration
+    %   fig_speed - amimation speed
+    %
+    % output:
+    %   q_history - All configuration during the algorithm
     disp('GRADIENT DESCEND')
     q_k = q_0;
     q_history = [];
