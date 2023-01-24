@@ -64,11 +64,11 @@ function newton_method(fr, q_0, r_d, q, k, eps, eps_q, q_des, sing_closeness, fi
     plot_errs_joints(error_history(3,:), fig_speed, 'Newton method', 'ez [m]')
 
     subplot(2,4,5);
-    plot_errs_joints(q_history(1,:), fig_speed, 'Newton method', 'q1 [rad]', q_des)
+    plot_errs_joints(q_history(1,:), fig_speed, 'Newton method', 'q1 [rad]', q_des, 1)
 
     subplot(2,4,6);
-    plot_errs_joints(q_history(2,:), fig_speed, 'Newton method', 'q2 [rad]', q_des)
+    plot_errs_joints(q_history(2,:), fig_speed, 'Newton method', 'q2 [rad]', q_des, 2)
 
     subplot(2,4,7);
-    plot_errs_joints(q_history(3,:), fig_speed, 'Newton method', 'q3 [rad]', q_des)
+    plot_errs_joints(q_history(3,:), fig_speed, 'Newton method', 'q3 [rad]', q_des, 3)
 end

@@ -1,4 +1,4 @@
-function plot_errs_joints(history, speed, t, ylab, q_des)
+function plot_errs_joints(history, speed, t, ylab, q_des, joint_i)
     % rotation_around_r - Compute the rotation matrix around a fixed
     % unitary vector r
     %
@@ -12,6 +12,7 @@ function plot_errs_joints(history, speed, t, ylab, q_des)
     %   Rtr - The 3x3 rotation matrix around r_m of angle theta
     if nargin < 5
         q_des = 0;
+        joint_i = 0;
     end
     
     y = [];
@@ -28,7 +29,7 @@ function plot_errs_joints(history, speed, t, ylab, q_des)
             hold on
             plot(y', LineStyle="-", Color="b");
             for j = 1:size(q_des, 2)
-                plot(q_des(1, j)*ones(length(history))', LineStyle="--", Color="r");
+                plot(q_des(joint_i, j)*ones(length(history))', LineStyle="--", Color="r");
             end
             hold off
         else

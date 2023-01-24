@@ -1,7 +1,9 @@
 clear all
+close all
 clc
 
-addpath("Functions\")
+addpath("Functions/") % Linux
+% addpath("Functions\") % Windows
 
 % general rotation around r
 %R = rotation_r([sym('rx') sym('ry') sym('rz')], sym('t'));
