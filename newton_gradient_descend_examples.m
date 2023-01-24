@@ -24,7 +24,7 @@ q_des = simplify([q_1_p q_1_s;
 q_des = vpa(subs(q_des, {px, py, pz}, {1, 1, 1}), 5);
 display(q_des)
 
-fig_speed = 0.1;
+fig_speed = 0.3;
 figure(1)
 newton_method(fr, q_0, r_d, q, 15, 5, 6, q_des, 4, fig_speed)
 figure(2)
