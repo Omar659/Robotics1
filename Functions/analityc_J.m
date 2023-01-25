@@ -2,6 +2,8 @@ function r_dot = analityc_J(fr, q, q_dot)
     % analityc_J - Compute the analytic Jacobian obtained by time  
     % differentiation
     %
+    % r_dot = analityc_J(fr, q, q_dot)
+    %
     % input:
     %   fr - Is the matrix [p; phi] = r
     %   q - Vector of symbols of the configuration
