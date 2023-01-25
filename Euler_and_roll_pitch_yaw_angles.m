@@ -83,5 +83,3 @@ disp(b_T_a)
 % R_z = rotation_around_r([0 0 1], sym("gamma"));
 % R_y = rotation_around_r([0 1 0], sym("beta"));
 % R_z*R_y
-
-
