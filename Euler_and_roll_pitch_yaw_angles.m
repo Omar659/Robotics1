@@ -2,8 +2,8 @@ clear all
 close all
 clc
 
-addpath("Functions/") % Linux
-% addpath("Functions\") % Windows
+% addpath("Functions/") % Linux
+addpath("Functions\") % Windows
 
 w_R_zxz = euler_RPY([0 0 1], [1 0 0], [0 0 1], sym("phi"), sym("theta"), sym("psi"), true);
 disp("Rotation matrix with moving axis around Z -> X' -> Z''")
@@ -78,3 +78,10 @@ disp(a_T_b)
 b_T_a = inverse_T(a_T_b);
 disp("The inverse of the previous 4x4 transformation matrix:")
 disp(b_T_a)
+
+
+% R_z = rotation_around_r([0 0 1], sym("gamma"));
+% R_y = rotation_around_r([0 1 0], sym("beta"));
+% R_z*R_y
+
+
