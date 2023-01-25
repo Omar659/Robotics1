@@ -1,4 +1,4 @@
-function r_dot = analityc_J(fr, q, q_dot)
+function [J_r, r_dot] = analityc_J(fr, q, q_dot)
     % analityc_J - Compute the analytic Jacobian obtained by time  
     % differentiation
     %

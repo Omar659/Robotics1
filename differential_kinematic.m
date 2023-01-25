@@ -39,9 +39,10 @@ fr = [l1*cos(q1) + l2*cos(q1 + q2);
       q1 + q2];
 q = [q1; q2];
 q_d = [q1_d; q2_d];
-J = jacobian(fr, q);
-display(J)
-r_d = simplify(analityc_J(fr, q, q_d));
+[J_r, r_d] = analityc_J(fr, q, q_d);
+J_r = simplify(J_r);
+display(J_r)
+r_d = simplify(r_d);
 display(r_d)
 
 % Example slide 11 pag 14
@@ -52,9 +53,10 @@ fr = [q3*cos(q2)*cos(q1);
       d1 + q3 * sin(q2)];
 q = [q1; q2; q3];
 q_d = [q1_d; q2_d; q3_d];
-J = jacobian(fr, q);
-display(J)
-r_d = simplify(analityc_J(fr, q, q_d));
+[J_r, r_d] = analityc_J(fr, q, q_d);
+J_r = simplify(J_r);
+display(J_r)
+r_d = simplify(r_d);
 display(r_d)
 
 % Example slide 11 pag 19
@@ -71,4 +73,27 @@ w_E = simplify(w_E);
 display(w_E)
 J = simplify(J);
 display(J)
+
+% Example slide 11 pag 29
+syms q1 q2 q3 q1_d q2_d q3_d real
+
+fr = [cos(q1) + cos(q1 + q2) + cos(q1 + q2 + q3);
+      sin(q1) + sin(q1 + q2) + sin(q1 + q2 + q3)];
+m = size(fr, 1);
+q = [q1; q2; q3];
+n = size(q, 1);
+q_d = [q1_d; q2_d; q3_d];
+[J_r, r_d] = analityc_J(fr, q, q_d);
+display(J_r)
+
+% case 1
+disp('CASE 1')
+mobility_analysis(J_r, r_d, m, n, q, q_d, [0, pi/2, pi/2])
+
+% case 2
+disp('CASE 2')
+mobility_analysis(J_r, r_d, m, n, q, q_d, [pi/2, 0, pi])
+
+
+
 
