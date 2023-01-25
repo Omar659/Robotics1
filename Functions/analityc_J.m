@@ -1,21 +1,17 @@
-function [p_dot, phi_dot] = analityc_J(fr, q, q_dot)
-    % inverse_T - Compute the inverse of the homogeneous transformation matrix
-    %
-    % b_T_a = inverse_T(a_T_b)
+function r_dot = analityc_J(fr, q, q_dot)
+    % analityc_J - Compute the analytic Jacobian obtained by time  
+    % differentiation
     %
     % input:
-    %   a_T_b - A 4x4 homogeneous transformation matrix
+    %   fr - Is the matrix [p; phi] = r
+    %   q - Vector of symbols of the configuration
+    %   q_dot - Vector of symbols of the joints velocities (derivative of
+    %   q)
     %
     % output:
-    %   b_T_a - The 4x4 inverse matrix of a_T_b
+    %   r_dot - Is the matrix [p_dot; phi_dot]
 
-    a_R_b = a_T_b(1:3,1:3);
-    b_R_a = a_R_b';
-    a_p_ab = a_T_b(1:3, 4);
-    b_P_ba = -b_R_a * a_p_ab;
-    b_T_a = [b_R_a(1,:) b_P_ba(1);
-             b_R_a(2,:) b_P_ba(2);
-             b_R_a(3,:) b_P_ba(3);
-             0 0 0 1];
+    J_r = jacobian(fr, q);
+    r_dot = J_r * q_dot;
 end
 
