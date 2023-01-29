@@ -21,6 +21,8 @@ function plot_robot_pose(joint_types, DH_table, O_A_i)
     joint_z = [];
     DH_a = [];
     DH_d = [];
+    DH_th = [];
+    DH_al = [];
     for i = 1:size(O_A_i, 2)/4
         joint_pos = [joint_pos O_A_i(1:3, i*4)];
         joint_x = [joint_x O_A_i(1:3, (i*4)-3)];
@@ -28,7 +30,9 @@ function plot_robot_pose(joint_types, DH_table, O_A_i)
         joint_z = [joint_z O_A_i(1:3, (i*4)-1)];
         if i < 4
             DH_a = [DH_a DH_table(i, 1)];
+            DH_al = [DH_al DH_table(i, 2)];
             DH_d = [DH_d DH_table(i, 3)];
+            DH_th = [DH_th DH_table(i, 4)];
         end
     end
 
@@ -41,6 +45,23 @@ function plot_robot_pose(joint_types, DH_table, O_A_i)
     
     % Alpha channel
     face_alpha = 0.5;
+
+    t = linspace(0,1/2*pi);
+    v = [];
+    f = [];
+    for i = 1:length(t)-1
+        v1 = 0.7*[0 0 0];
+        v2 = 0.7*[cos(t(i)) sin(t(i)) 0*t(i)];
+        v3 = 0.7*[cos(t(i+1)) sin(t(i+1)) 0*t(i+1)];
+        v = [v; v1; v2; v3];
+        f_i = [((i-1)*3)+1 ((i-1)*3)+2 ((i-1)*3)+3];
+        f = [f; f_i];
+    end
+    rot = O_A_i(1:3, end-3:end-1);
+    tran = O_A_i(1:3, end);
+    v = double(vpa(simplify(rot*v' + tran), 4));
+    v = v';
+    patch(Faces = f, Vertices = v, FaceColor = [1 0 0], EdgeColor='none', FaceAlpha=face_alpha);
 
     view(3);
     hold on
@@ -83,6 +104,10 @@ function plot_robot_pose(joint_types, DH_table, O_A_i)
                 from = joint_pos(:, p-1);
                 quiver3(from(1), from(2), from(3), to_x(1), to_x(2), to_x(3), Color = [1 0 0], LineStyle="--")
                 text(from(1) + to_x(1), from(2) + to_x(2), from(3) + to_x(3)-0.05, strcat("x", num2str(p-1)))
+                from = joint_pos(:, p);
+                to_z = joint_z(:, p-1);
+                quiver3(from(1), from(2), from(3), to_z(1), to_z(2), to_z(3), Color = [0 0 1], LineStyle="--")
+                text(from(1) + to_z(1), from(2) + to_z(2), from(3) + to_z(3)-0.05, strcat("z", num2str(p-2)))
             end
             if joint_types(p) == "ee"
                 from1 = joint_pos(:, p) - r_revolute*joint_y(:, p)*1.5;
