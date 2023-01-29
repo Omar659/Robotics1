@@ -32,6 +32,7 @@ function q_history = newton_method(fr, q_0, r_d, q, k, eps, eps_q, q_des, sing_c
     J_inv = inv(J);
     disp('STEP0')
     disp(q_k)
+    sing = false;
     for ep = 1:k
         q_history(:, end + 1) = q_k;
         fr_q_k = fr;
@@ -43,6 +44,7 @@ function q_history = newton_method(fr, q_0, r_d, q, k, eps, eps_q, q_des, sing_c
 
         if det(J_inv_k) <= 10^-sing_closeness 
             disp('SINGULARITY, OPERATION ABORTED')
+            sing = true;
             break
         end
         cartesian_error_k = r_d - fr_q_k;
@@ -63,25 +65,26 @@ function q_history = newton_method(fr, q_0, r_d, q, k, eps, eps_q, q_des, sing_c
         disp(strcat('STEP', num2str(ep)))
         disp(q_k)
     end
-        
-    subplot(2,4,1);
-    plot_errs_joints(norm_error_history, fig_speed, 'Newton method', 'norm of Cartesian position error [m]')
-
-    subplot(2,4,2);
-    plot_errs_joints(error_history(1,:), fig_speed, 'Newton method', 'ex [m]')
-
-    subplot(2,4,3);
-    plot_errs_joints(error_history(2,:), fig_speed, 'Newton method', 'ey [m]')
-
-    subplot(2,4,4);
-    plot_errs_joints(error_history(3,:), fig_speed, 'Newton method', 'ez [m]')
-
-    subplot(2,4,5);
-    plot_errs_joints(q_history(1,:), fig_speed, 'Newton method', 'q1 [rad]', q_des, 1)
-
-    subplot(2,4,6);
-    plot_errs_joints(q_history(2,:), fig_speed, 'Newton method', 'q2 [rad]', q_des, 2)
-
-    subplot(2,4,7);
-    plot_errs_joints(q_history(3,:), fig_speed, 'Newton method', 'q3 [rad]', q_des, 3)
+    if ~sing
+        subplot(2,4,1);
+        plot_errs_joints(norm_error_history, fig_speed, 'Newton method', 'norm of Cartesian position error [m]')
+    
+        subplot(2,4,2);
+        plot_errs_joints(error_history(1,:), fig_speed, 'Newton method', 'ex [m]')
+    
+        subplot(2,4,3);
+        plot_errs_joints(error_history(2,:), fig_speed, 'Newton method', 'ey [m]')
+    
+        subplot(2,4,4);
+        plot_errs_joints(error_history(3,:), fig_speed, 'Newton method', 'ez [m]')
+    
+        subplot(2,4,5);
+        plot_errs_joints(q_history(1,:), fig_speed, 'Newton method', 'q1 [rad]', q_des, 1)
+    
+        subplot(2,4,6);
+        plot_errs_joints(q_history(2,:), fig_speed, 'Newton method', 'q2 [rad]', q_des, 2)
+    
+        subplot(2,4,7);
+        plot_errs_joints(q_history(3,:), fig_speed, 'Newton method', 'q3 [rad]', q_des, 3)
+    end
 end

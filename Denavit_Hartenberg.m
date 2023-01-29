@@ -2,8 +2,8 @@ clear all
 close all
 clc
 
-addpath("Functions/") % Linux
-% addpath("Functions\") % Windows
+% addpath("Functions/") % Linux
+addpath("Functions\") % Windows
 
 % Example of slide 9 pag 25
 A_01 = dh_matrix(0, sym('a1'), sym('d1'), sym('q1'));
@@ -73,3 +73,14 @@ display(p)
 % bits_res=ceil(log2(tracks_motor))
 % bits=bits_turn+bits_res
 % % end
+
+
+% Test for nsap in the slide 10 pag 28
+% syms q1 q2 q3 d1 real
+% A_01 = dh_matrix(0, -pi/2, d1, q1);
+% A_12 = dh_matrix(0, -pi/2, 0, q2-pi/2);
+% A_23 = dh_matrix(0, 0, q3, 0);
+% A_03 = A_01*A_12*A_23;
+% p = A_03(1:3, 4);
+% p
+% subs(p, {q1, q2, q3}, {0 0 1})

@@ -16,33 +16,43 @@ function plot_errs_joints(history, speed, t, ylab, q_des, joint_i)
     end
     
     y = [];
-    plot(y)
+    y = history;
+    hold on
+    if 0 ~= q_des 
+        plot(y', LineStyle="-", Color="b");
+        for j = 1:size(q_des, 2)
+            plot(q_des(joint_i, j)*ones(length(history))', LineStyle="--", Color="r");
+        end
+    else
+        plot(y', Color="b")
+    end
+    hold off
     xlabel('Iterations')
     ylabel(ylab)
     xlim([1 length(history)])
     ylim([(min(history) - abs(mean(history))*0.1)  (max(history) + abs(mean(history))*0.1)])
     title(t)
     grid on
-    for i = 1: length(history)
-        y = [y history(i)];
-        if 0 ~= q_des 
-            hold on
-            plot(y', LineStyle="-", Color="b");
-            for j = 1:size(q_des, 2)
-                plot(q_des(joint_i, j)*ones(length(history))', LineStyle="--", Color="r");
-            end
-            hold off
-        else
-            plot(y', Color="b")
-        end
-        xlabel('Iterations')
-        ylabel(ylab)
-        xlim([1 length(history)])
-        ylim([(min(history) - abs(mean(history))*0.1)  (max(history) + abs(mean(history))*0.1)])
-        title(t)
-        grid on
-        drawnow %aggiorna il grafico in modo dinamico
-        pause(speed) %aspetta 0.1 secondi prima di aggiungere un nuovo punto
-    end
+%     for i = 1: length(history)
+%         y = [y history(i)];
+%         if 0 ~= q_des 
+%             hold on
+%             plot(y', LineStyle="-", Color="b");
+%             for j = 1:size(q_des, 2)
+%                 plot(q_des(joint_i, j)*ones(length(history))', LineStyle="--", Color="r");
+%             end
+%             hold off
+%         else
+%             plot(y', Color="b")
+%         end
+%         xlabel('Iterations')
+%         ylabel(ylab)
+%         xlim([1 length(history)])
+%         ylim([(min(history) - abs(mean(history))*0.1)  (max(history) + abs(mean(history))*0.1)])
+%         title(t)
+%         grid on
+%         drawnow %aggiorna il grafico in modo dinamico
+%         pause(speed) %aspetta 0.1 secondi prima di aggiungere un nuovo punto
+%     end
 
 end
