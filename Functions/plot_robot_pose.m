@@ -28,7 +28,7 @@ function plot_robot_pose(joint_types, DH_table, O_A_i)
         joint_x = [joint_x O_A_i(1:3, (i*4)-3)];
         joint_y = [joint_y O_A_i(1:3, (i*4)-2)];
         joint_z = [joint_z O_A_i(1:3, (i*4)-1)];
-        if i < 4
+        if i < size(O_A_i, 2)/4
             DH_a = [DH_a DH_table(i, 1)];
             DH_al = [DH_al DH_table(i, 2)];
             DH_d = [DH_d DH_table(i, 3)];
@@ -164,7 +164,9 @@ function plot_robot_pose(joint_types, DH_table, O_A_i)
             end
             
         end
-
+        xlabel('x')
+        ylabel('y')
+        zlabel('z')
         grid on
         light
         lighting gouraud
