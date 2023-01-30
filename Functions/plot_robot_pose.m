@@ -65,6 +65,13 @@ function plot_robot_pose(joint_types, DH_table, O_A_i)
                             radii_prismatic_link(7:12)*0.9  ...
                             radii_prismatic_link(13:18)*0.83  ...
                             radii_prismatic_link(19:24)*0.77 0];
+    radii_ee = ones(1,22)*r_revolute*0.3;
+    radii_ee = [0 radii_ee 0];
+    radii_revolute = ones(1,22)*r_revolute;
+    radii_revolute = [0 radii_revolute 0];
+    radii_prismatic = ones(1,22)*r_revolute*0.9;
+    radii_prismatic = [0 radii_prismatic 0];
+
     view(3);
     hold on
         % Joints plot
@@ -80,11 +87,11 @@ function plot_robot_pose(joint_types, DH_table, O_A_i)
             [x_c, y_c, z_c] = cylinder2P(radii, 20, joint_pos(:, i-1)', to');
             x_c = double(x_c);
             y_c = double(y_c);
-            z_c = double(z_c);
-            surf(x_c, y_c, z_c, FaceColor=disp_color, EdgeColor='none', FaceAlpha=face_alpha)
+            z_c = double(z_c);            
+            surface(x_c, y_c, z_c, FaceColor=disp_color, EdgeColor='none', FaceAlpha=face_alpha)
             disp_from = joint_pos(:, i-1) + 1.3*r_revolute*joint_x(:, i-1);
             disp_to = joint_pos(:, i-1) + DH_d(i-1)*joint_z(:, i-1) + 1.3*r_revolute*joint_x(:, i-1);
-            plot3([disp_from(1) disp_to(1)], [disp_from(2) disp_to(2)], [disp_from(3) disp_to(3)], ...
+            line([disp_from(1) disp_to(1)], [disp_from(2) disp_to(2)], [disp_from(3) disp_to(3)], ...
                   Color = disp_color, LineWidth=line_width)
             text((disp_from(1) + disp_to(1))/2, (disp_from(2) + disp_to(2))/2, (disp_from(3) + disp_to(3))/2, ...
                  strcat("d", num2str(i-1), "=", num2str(double(DH_d(i-1)))), ...
@@ -98,10 +105,10 @@ function plot_robot_pose(joint_types, DH_table, O_A_i)
             x_c = double(x_c);
             y_c = double(y_c);
             z_c = double(z_c);
-            surf(x_c, y_c, z_c, FaceColor=comm_norm_color, EdgeColor='none', FaceAlpha=face_alpha)
+            surface(x_c, y_c, z_c, FaceColor=comm_norm_color, EdgeColor='none', FaceAlpha=face_alpha)
             disp_from = joint_pos(:, i) + 1.3*r_revolute*joint_z(:, i);
             disp_to = joint_pos(:, i) - DH_a(i-1)*joint_x(:, i) + 1.3*r_revolute*joint_z(:, i);
-            plot3([disp_from(1) disp_to(1)], [disp_from(2) disp_to(2)], [disp_from(3) disp_to(3)], ...
+            line([disp_from(1) disp_to(1)], [disp_from(2) disp_to(2)], [disp_from(3) disp_to(3)], ...
                   Color = comm_norm_color, LineWidth=line_width)
             text((disp_from(1) + disp_to(1))/2, (disp_from(2) + disp_to(2))/2, (disp_from(3) + disp_to(3))/2, ...
                  strcat("a", num2str(i-1), "=", num2str(double(DH_a(i-1)))), ...
@@ -113,9 +120,9 @@ function plot_robot_pose(joint_types, DH_table, O_A_i)
             to_x = joint_x(:, p);
             to_y = joint_y(:, p);
             to_z = joint_z(:, p);
-            quiver3(from(1), from(2), from(3), to_x(1), to_x(2), to_x(3), Color = x_color, LineWidth=line_width)
-            quiver3(from(1), from(2), from(3), to_y(1), to_y(2), to_y(3), Color = y_color, LineWidth=line_width)
-            quiver3(from(1), from(2), from(3), to_z(1), to_z(2), to_z(3), Color = z_color, LineWidth=line_width)
+%             quiver3(from(1), from(2), from(3), to_x(1), to_x(2), to_x(3), Color = x_color, LineWidth=line_width)
+%             quiver3(from(1), from(2), from(3), to_y(1), to_y(2), to_y(3), Color = y_color, LineWidth=line_width)
+%             quiver3(from(1), from(2), from(3), to_z(1), to_z(2), to_z(3), Color = z_color, LineWidth=line_width)
             text(from(1) + to_x(1), from(2) + to_x(2), from(3) + to_x(3), ...
                  strcat("x", num2str(p-1)), Color = x_color, FontSize=font_size, ...
                  HorizontalAlignment="center", VerticalAlignment="middle",FontWeight="bold")
@@ -132,7 +139,7 @@ function plot_robot_pose(joint_types, DH_table, O_A_i)
                 if DH_th(p-1) == 0
                     offset = 0.05;
                 end
-                quiver3(from_x_j(1), from_x_j(2), from_x_j(3), to_x(1), to_x(2), to_x(3), Color = x_color, LineStyle="--", LineWidth=line_width)
+%                 quiver3(from_x_j(1), from_x_j(2), from_x_j(3), to_x(1), to_x(2), to_x(3), Color = x_color, LineStyle="--", LineWidth=line_width)
                 text(from_x_j(1) + to_x(1), from_x_j(2) + to_x(2), from_x_j(3) + to_x(3)-offset, ...
                      strcat("x", num2str(p-1)), Color = x_color, FontSize=font_size, ...
                      HorizontalAlignment="center", VerticalAlignment="middle",FontWeight="bold")
@@ -142,7 +149,7 @@ function plot_robot_pose(joint_types, DH_table, O_A_i)
                 if DH_al(p-1) == 0
                     offset = 0.05;
                 end
-                quiver3(from_z_j(1), from_z_j(2), from_z_j(3), to_z_j(1), to_z_j(2), to_z_j(3), Color = z_color, LineStyle="--", LineWidth=line_width)
+%                 quiver3(from_z_j(1), from_z_j(2), from_z_j(3), to_z_j(1), to_z_j(2), to_z_j(3), Color = z_color, LineStyle="--", LineWidth=line_width)
                 text(from_z_j(1) + to_z_j(1), from_z_j(2) + to_z_j(2), from_z_j(3) + to_z_j(3)-offset, ...
                      strcat("z", num2str(p-2)), Color = z_color, FontSize=font_size,...
                      HorizontalAlignment="center", VerticalAlignment="middle",FontWeight="bold")
@@ -177,7 +184,7 @@ function plot_robot_pose(joint_types, DH_table, O_A_i)
                      (joint_pos(3, p-1) + 0.7*joint_x(3, p-1) + from_x_j(3) + 0.7*to_x(3))/2, ...
                      strcat("Θ", num2str(p-1), "=", num2str(double(DH_th(p-1)))), Color=x_color, FontSize=font_size, ...
                      HorizontalAlignment="center", VerticalAlignment="middle",FontWeight="bold")
-                plot3(v_line_th(1:end-1,1), v_line_th(1:end-1,2), v_line_th(1:end-1,3), ...
+                line(v_line_th(1:end-1,1), v_line_th(1:end-1,2), v_line_th(1:end-1,3), ...
                       Color = x_color, LineWidth=line_width, LineStyle="--")
                 from = v_line_th(end-1,:);
                 to = v_line_th(end,:);
@@ -185,7 +192,7 @@ function plot_robot_pose(joint_types, DH_table, O_A_i)
                 x_c = double(x_c);
                 y_c = double(y_c);
                 z_c = double(z_c);
-                surf(x_c, y_c, z_c, FaceColor=x_color, EdgeColor='none')
+                surface(x_c, y_c, z_c, FaceColor=x_color, EdgeColor='none')
 
                 
                 % Circle for alpha
@@ -218,7 +225,7 @@ function plot_robot_pose(joint_types, DH_table, O_A_i)
                      (joint_pos(3, p) + 0.7*joint_z(3, p) + joint_pos(3, p) + 0.7*to_z_j(3))/2, ...
                      strcat("α", num2str(p-1), "=", num2str(double(DH_al(p-1)))), Color=z_color, FontSize=font_size, ...
                      HorizontalAlignment="center", VerticalAlignment="middle",FontWeight="bold")
-                plot3(v_line_al(2:end,1), v_line_al(2:end,2), v_line_al(2:end,3), ...
+                line(v_line_al(2:end,1), v_line_al(2:end,2), v_line_al(2:end,3), ...
                       Color = z_color, LineWidth=line_width, LineStyle="--")
                 from = v_line_al(2,:);
                 to = v_line_al(1,:);
@@ -226,59 +233,52 @@ function plot_robot_pose(joint_types, DH_table, O_A_i)
                 x_c = double(x_c);
                 y_c = double(y_c);
                 z_c = double(z_c);
-                surf(x_c, y_c, z_c, FaceColor=z_color, EdgeColor='none')
+                surface(x_c, y_c, z_c, FaceColor=z_color, EdgeColor='none')
             end
             if joint_types(p) == "ee"
                 from1 = joint_pos(:, p) - r_revolute*joint_y(:, p)*1.5;
                 to1 = joint_pos(:, p) + r_revolute*joint_y(:, p)*1.5;
-                radiuses = ones(1,22)*r_revolute*0.3;
-                radiuses = [0 radiuses 0];
-                [x_c, y_c, z_c] = cylinder2P(radiuses, 20, from1', to1');
+                radii = radii_ee;
+                [x_c, y_c, z_c] = cylinder2P(radii, 20, from1', to1');
                 x_c = double(x_c);
                 y_c = double(y_c);
                 z_c = double(z_c);
-                surf(x_c, y_c, z_c, FaceColor=[.9 .9 .9], EdgeColor='none', FaceAlpha=face_alpha)
+                surface(x_c, y_c, z_c, FaceColor=[.9 .9 .9], EdgeColor='none', FaceAlpha=face_alpha)
 
                 from2 = from1;
                 to2 = from1 + r_revolute*joint_z(:, p)*1.5;
-                radiuses = ones(1,22)*r_revolute*0.3;
-                radiuses = [0 radiuses 0];
-                [x_c, y_c, z_c] = cylinder2P(radiuses, 20, from2', to2');
+                [x_c, y_c, z_c] = cylinder2P(radii, 20, from2', to2');
                 x_c = double(x_c);
                 y_c = double(y_c);
                 z_c = double(z_c);
-                surf(x_c, y_c, z_c, FaceColor=[.9 .9 .9], EdgeColor='none', FaceAlpha=face_alpha)
+                surface(x_c, y_c, z_c, FaceColor=[.9 .9 .9], EdgeColor='none', FaceAlpha=face_alpha)
 
                 from3 = to1;
                 to3 = to1 + r_revolute*joint_z(:, p)*1.5;
-                radiuses = ones(1,22)*r_revolute*0.3;
-                radiuses = [0 radiuses 0];
-                [x_c, y_c, z_c] = cylinder2P(radiuses, 20, from3', to3');
+                [x_c, y_c, z_c] = cylinder2P(radii, 20, from3', to3');
                 x_c = double(x_c);
                 y_c = double(y_c);
                 z_c = double(z_c);
-                surf(x_c, y_c, z_c, FaceColor=[.9 .9 .9], EdgeColor='none', FaceAlpha=face_alpha)
+                surface(x_c, y_c, z_c, FaceColor=[.9 .9 .9], EdgeColor='none', FaceAlpha=face_alpha)
             else
                 from = joint_pos(:, p) - r_revolute*joint_z(:, p);
                 to = joint_pos(:, p) + r_revolute*joint_z(:, p);
-                radiuses = ones(1,22)*r_revolute;
-                radiuses = [0 radiuses 0];
-                [x_c, y_c, z_c] = cylinder2P(radiuses, 20, from', to');
+                radii = radii_revolute;
+                [x_c, y_c, z_c] = cylinder2P(radii, 20, from', to');
                 x_c = double(x_c);
                 y_c = double(y_c);
                 z_c = double(z_c);
-                surf(x_c, y_c, z_c, FaceColor=[.9 .9 .9], EdgeColor='none', FaceAlpha=face_alpha)
+                surface(x_c, y_c, z_c, FaceColor=[.9 .9 .9], EdgeColor='none', FaceAlpha=face_alpha)
     
                 if joint_types(p) == "p"
                     from = joint_pos(:, p) - r_revolute*joint_z(:, p)*1.5;
                     to = joint_pos(:, p) + r_revolute*joint_z(:, p)*1.5;
-                    radiuses = ones(1,22)*r_revolute*0.9;
-                    radiuses = [0 radiuses 0];
-                    [x_c, y_c, z_c] = cylinder2P(radiuses, 7, from', to');
+                    radii = radii_prismatic;
+                    [x_c, y_c, z_c] = cylinder2P(radii, 7, from', to');
                     x_c = double(x_c);
                     y_c = double(y_c);
                     z_c = double(z_c);
-                    surf(x_c, y_c, z_c, FaceColor=[.9 .9 .9], EdgeColor='none', FaceAlpha=face_alpha)
+                    surface(x_c, y_c, z_c, FaceColor=[.9 .9 .9], EdgeColor='none', FaceAlpha=face_alpha)
                 end
             end
             
@@ -287,8 +287,8 @@ function plot_robot_pose(joint_types, DH_table, O_A_i)
         ylabel('y')
         zlabel('z')
         grid on
-        light
-        lighting gouraud
+%         light
+%         lighting gouraud
     hold off
 
 end
