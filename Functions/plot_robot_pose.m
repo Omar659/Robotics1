@@ -120,9 +120,9 @@ function plot_robot_pose(joint_types, DH_table, O_A_i)
             to_x = joint_x(:, p);
             to_y = joint_y(:, p);
             to_z = joint_z(:, p);
-%             quiver3(from(1), from(2), from(3), to_x(1), to_x(2), to_x(3), Color = x_color, LineWidth=line_width)
-%             quiver3(from(1), from(2), from(3), to_y(1), to_y(2), to_y(3), Color = y_color, LineWidth=line_width)
-%             quiver3(from(1), from(2), from(3), to_z(1), to_z(2), to_z(3), Color = z_color, LineWidth=line_width)
+            quiver3(from(1), from(2), from(3), to_x(1), to_x(2), to_x(3), Color = x_color, LineWidth=line_width)
+            quiver3(from(1), from(2), from(3), to_y(1), to_y(2), to_y(3), Color = y_color, LineWidth=line_width)
+            quiver3(from(1), from(2), from(3), to_z(1), to_z(2), to_z(3), Color = z_color, LineWidth=line_width)
             text(from(1) + to_x(1), from(2) + to_x(2), from(3) + to_x(3), ...
                  strcat("x", num2str(p-1)), Color = x_color, FontSize=font_size, ...
                  HorizontalAlignment="center", VerticalAlignment="middle",FontWeight="bold")
@@ -139,7 +139,7 @@ function plot_robot_pose(joint_types, DH_table, O_A_i)
                 if DH_th(p-1) == 0
                     offset = 0.05;
                 end
-%                 quiver3(from_x_j(1), from_x_j(2), from_x_j(3), to_x(1), to_x(2), to_x(3), Color = x_color, LineStyle="--", LineWidth=line_width)
+                quiver3(from_x_j(1), from_x_j(2), from_x_j(3), to_x(1), to_x(2), to_x(3), Color = x_color, LineStyle="--", LineWidth=line_width)
                 text(from_x_j(1) + to_x(1), from_x_j(2) + to_x(2), from_x_j(3) + to_x(3)-offset, ...
                      strcat("x", num2str(p-1)), Color = x_color, FontSize=font_size, ...
                      HorizontalAlignment="center", VerticalAlignment="middle",FontWeight="bold")
@@ -149,7 +149,7 @@ function plot_robot_pose(joint_types, DH_table, O_A_i)
                 if DH_al(p-1) == 0
                     offset = 0.05;
                 end
-%                 quiver3(from_z_j(1), from_z_j(2), from_z_j(3), to_z_j(1), to_z_j(2), to_z_j(3), Color = z_color, LineStyle="--", LineWidth=line_width)
+                quiver3(from_z_j(1), from_z_j(2), from_z_j(3), to_z_j(1), to_z_j(2), to_z_j(3), Color = z_color, LineStyle="--", LineWidth=line_width)
                 text(from_z_j(1) + to_z_j(1), from_z_j(2) + to_z_j(2), from_z_j(3) + to_z_j(3)-offset, ...
                      strcat("z", num2str(p-2)), Color = z_color, FontSize=font_size,...
                      HorizontalAlignment="center", VerticalAlignment="middle",FontWeight="bold")
@@ -287,8 +287,8 @@ function plot_robot_pose(joint_types, DH_table, O_A_i)
         ylabel('y')
         zlabel('z')
         grid on
-%         light
-%         lighting gouraud
+        light
+        lighting gouraud
     hold off
 
 end
