@@ -34,9 +34,11 @@ A_12 = dh_matrix(DH_table(2,1), DH_table(2,2), DH_table(2,3), DH_table(2,4));
 b_A_01 = b_T_a * A_01;
 b_A_02 = b_T_a * A_01 * A_12;
 
-% joint_types = ['r', 'r', "ee"];
-% O_A_i = [b_T_a b_A_01 b_A_02];
-% plot_robot_pose(joint_types, DH_table, O_A_i)
+joint_types = ['r', 'r', "ee"];
+O_A_i = [b_T_a b_A_01 b_A_02];
+O_A_i = subs(O_A_i, {q1_a, q2_a, q1_b, q2_b}, {q_a(1), q_a(2), q_b(1), q_b(2)});
+DH_table = subs(DH_table, {q1_a, q2_a, q1_b, q2_b}, {q_a(1), q_a(2), q_b(1), q_b(2)});
+plot_robot_pose(joint_types, DH_table, O_A_i)
 
 EE_a = simplify(A_02_a(1:3, 4))
 J_a = simplify(jacobian(EE_a, [q1_a; q2_a]))
