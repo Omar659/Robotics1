@@ -42,7 +42,11 @@ figure(2)
 q_history_GD = gradient_descend(fr, q_0, r_d, q, 0.7, 150, 5, 6, q_des, fig_speed);
 
 % figure(3)
-% robot_animation(q_history_N, joint_positions, r_d, q, fig_speed*10)
+% joint_types = ["r" "r" "p" "ee"];
+% joint_positions = [0 0 fr(1);
+%                    0 0 fr(2);
+%                    0 d1 fr(3);];
+% robot_animation(q_history_GD, joint_positions, r_d, q,joint_types, fig_speed*10)
 
 figure(4);
 clf
