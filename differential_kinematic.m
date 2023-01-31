@@ -93,7 +93,3 @@ mobility_analysis(J_r, r_d, m, n, q, q_d, [0, pi/2, pi/2])
 % case 2
 disp('CASE 2')
 mobility_analysis(J_r, r_d, m, n, q, q_d, [pi/2, 0, pi])
-
-
-
-
