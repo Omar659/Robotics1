@@ -26,3 +26,9 @@ c_v = simplify(SOL(3))
 
 q_t = simplify(subs(q_t, {a, b, c, d, e, f}, {a_v, b_v, c_v, d_v, e_v, f_v}))
 q_t = simplify(subs(q_t, {q0, q1, v0, v1, a0, a1}, {0, 1, 0, 0, 0, 0}))
+
+x = [0 1 2.5 3.6 5 7 8.1 10];
+y = sin(x);
+xx = 0:.25:10;
+yy = spline(x,y,xx);
+plot(x,y,'o',xx,yy)
