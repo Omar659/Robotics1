@@ -1,4 +1,4 @@
-function check = check_matrix(A)
+function [check_orth, check_n, check_det] = check_matrix(A)
     % check_matrix - Check if a 3x3 matrix A is ortonormal with determinant = +1
     %
     % sintax: check = check_matrix(A)
@@ -7,8 +7,10 @@ function check = check_matrix(A)
     %   A - A 3x3 matrix
     %
     % output:
-    %   check - Boolean value that is true if the matrix is ortonormal with
-    %   determinant = +1, false otherwise
+    %   check_orth - Boolean value that is true if the matrix is ortogonal
+    %   check_n - Boolean value that is true if the matrix is normal
+    %   check_det - Boolean value that is true if the matrix has 
+    %               determinant = +1
     
     % check orthogonality
     check_orth = true;
@@ -32,6 +34,4 @@ function check = check_matrix(A)
     end
     % check determinant
     check_det = abs(det(A) - 1) < 1e-6;
-    % combine checks
-    check = check_orth && check_n && check_det;
 end
