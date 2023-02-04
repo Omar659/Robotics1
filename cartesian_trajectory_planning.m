@@ -70,10 +70,33 @@ z = r*sin(s);
 x_plot = subs(x, {s, r}, {s_ls, 1});
 y_plot = subs(y, {s, r}, {s_ls, 1});
 z_plot = subs(z, {s, r}, {s_ls, 1});
+[t_s, n_s, b_s, k_s, tau_s] = frenet_frame([x; y; z], s)
 figure(2)
-view(3)
-line(x_plot, y_plot, z_plot)
-grid on
+% for i = 1:100
+    clf
+    view(3)
+    i = 50;
+    t_s_plot = subs(t_s, {s, r}, {s_ls(i), 1});
+    n_s_plot = subs(n_s, {s, r}, {s_ls(i), 1});
+    b_s_plot = subs(b_s, {s, r}, {s_ls(i), 1});
+    point = [subs(x, {s, r}, {s_ls(i), 1});
+             subs(y, {s, r}, {s_ls(i), 1});
+             subs(z, {s, r}, {s_ls(i), 1})];
+    hold on
+        line(x_plot, y_plot, z_plot)
+        quiver3(point(1), point(2), point(3), t_s_plot(1), t_s_plot(2), t_s_plot(3))
+        text(point(1) + t_s_plot(1), point(2) + t_s_plot(2), point(3) + t_s_plot(3), "t(s)")
+        quiver3(point(1), point(2), point(3), n_s_plot(1), n_s_plot(2), n_s_plot(3))
+        text(point(1) + n_s_plot(1), point(2) + n_s_plot(2), point(3) + n_s_plot(3), "n(s)")
+        quiver3(point(1), point(2), point(3), b_s_plot(1), b_s_plot(2), b_s_plot(3))
+        text(point(1) + b_s_plot(1), point(2) + b_s_plot(2), point(3) + b_s_plot(3), "b(s)")
+    hold off
+    grid on
+    xlim([double(min([x_plot y_plot z_plot]))-1 double(max([x_plot y_plot z_plot]))+1])
+    ylim([double(min([x_plot y_plot z_plot]))-1 double(max([x_plot y_plot z_plot]))+1])
+    zlim([double(min([x_plot y_plot z_plot]))-1 double(max([x_plot y_plot z_plot]))+1])
+%     pause(0.005)
+% end
 
 % Helix curve
 s_ls = linspace(0, 2*pi, 100);
@@ -85,10 +108,10 @@ y_plot = subs(y, {s, r, h}, {s_ls, 1, 2});
 z_plot = subs(z, {s, r, h}, {s_ls, 1, 2});
 [t_s, n_s, b_s, k_s, tau_s] = frenet_frame([x; y; z], s)
 figure(3)
-for i = 1:100
+% for i = 1:100
     clf
     view(3)
-    % i = 50;
+    i = 50;
     t_s_plot = subs(t_s, {s, r, h}, {s_ls(i), 1, 2});
     n_s_plot = subs(n_s, {s, r, h}, {s_ls(i), 1, 2});
     b_s_plot = subs(b_s, {s, r, h}, {s_ls(i), 1, 2});
@@ -101,12 +124,13 @@ for i = 1:100
         text(point(1) + t_s_plot(1), point(2) + t_s_plot(2), point(3) + t_s_plot(3), "t(s)")
         quiver3(point(1), point(2), point(3), n_s_plot(1), n_s_plot(2), n_s_plot(3))
         text(point(1) + n_s_plot(1), point(2) + n_s_plot(2), point(3) + n_s_plot(3), "n(s)")
-
         quiver3(point(1), point(2), point(3), b_s_plot(1), b_s_plot(2), b_s_plot(3))
         text(point(1) + b_s_plot(1), point(2) + b_s_plot(2), point(3) + b_s_plot(3), "b(s)")
     hold off
     grid on
-    drawnow
-    pause(0.05)
-end
+    xlim([double(min([x_plot y_plot z_plot]))-1 double(max([x_plot y_plot z_plot]))+1])
+    ylim([double(min([x_plot y_plot z_plot]))-1 double(max([x_plot y_plot z_plot]))+1])
+    zlim([double(min([x_plot y_plot z_plot]))-1 double(max([x_plot y_plot z_plot]))+1])
+%     pause(0.005)
+% end
 
