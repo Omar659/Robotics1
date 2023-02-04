@@ -68,4 +68,4 @@ p = A_03(1:3, 4);
 q_a = [q_0(1); q_0(2)-pi/2; q_0(3)];
 O_A_i = vpa(simplify(subs(O_A_i, {q1, q2, q3}, {q_a(1), q_a(2), q_a(3)})) ,4);
 DH_table = vpa(simplify(subs(DH_table, {q1, q2, q3}, {q_a(1), q_a(2), q_a(3)})) ,4);
-plot_robot_pose(joint_types, DH_table, O_A_i, false)
+plot_robot_pose_lite(joint_types, DH_table, O_A_i, false)
