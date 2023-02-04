@@ -55,7 +55,7 @@ function plot_robot_pose_lite(joint_types, DH_table, O_A_i, show_rotation)
     z_color = [0 0 .7];
     disp_color = [0 0.5 1];
     comm_norm_color = [1 0.7 0.2];
-    joint_color = [.9 .9 .9];
+    joint_color = [.7 .7 .7];
 
     % Plot parameters
     line_width = 2;
@@ -87,12 +87,18 @@ function plot_robot_pose_lite(joint_types, DH_table, O_A_i, show_rotation)
 %             end
 % 
 %             % Displacement
-%             to = joint_pos(:, i-1) + DH_d(i-1)*joint_z(:, i-1);
+            from = joint_pos(:, i-1);
+            to = joint_pos(:, i-1) + DH_d(i-1)*joint_z(:, i-1);
 %             [x_c, y_c, z_c] = cylinder2P(radii, 20, joint_pos(:, i-1)', to');
 %             x_c = double(x_c);
 %             y_c = double(y_c);
 %             z_c = double(z_c);            
             %surface(x_c, y_c, z_c, FaceColor=disp_color, EdgeColor='none', FaceAlpha=face_alpha)
+            color_scale = 1;
+            if joint_types(i-1) == "p"
+                color_scale = 0.4;
+            end
+            line([from(1) to(1)], [from(2) to(2)], [from(3) to(3)], Color = disp_color*color_scale, LineWidth = line_width*4, LineStyle = ":")
             disp_from = joint_pos(:, i-1) + 1.3*r_revolute*joint_x(:, i-1);
             disp_to = joint_pos(:, i-1) + DH_d(i-1)*joint_z(:, i-1) + 1.3*r_revolute*joint_x(:, i-1);
             line([disp_from(1) disp_to(1)], [disp_from(2) disp_to(2)], [disp_from(3) disp_to(3)], ...
@@ -104,12 +110,14 @@ function plot_robot_pose_lite(joint_types, DH_table, O_A_i, show_rotation)
 
             % Common normal
 %             radii = radii_normal;
-%             to = joint_pos(:, i) - DH_a(i-1)*joint_x(:, i);
+            from = joint_pos(:, i);
+            to = joint_pos(:, i) - DH_a(i-1)*joint_x(:, i);
 %             [x_c, y_c, z_c] = cylinder2P(radii, 20, joint_pos(:, i)', to');
 %             x_c = double(x_c);
 %             y_c = double(y_c);
 %             z_c = double(z_c);
             %surface(x_c, y_c, z_c, FaceColor=comm_norm_color, EdgeColor='none', FaceAlpha=face_alpha)
+            line([from(1) to(1)], [from(2) to(2)], [from(3) to(3)], Color = comm_norm_color, LineWidth = line_width*4, LineStyle = ":")
             disp_from = joint_pos(:, i) + 1.3*r_revolute*joint_z(:, i);
             disp_to = joint_pos(:, i) - DH_a(i-1)*joint_x(:, i) + 1.3*r_revolute*joint_z(:, i);
             line([disp_from(1) disp_to(1)], [disp_from(2) disp_to(2)], [disp_from(3) disp_to(3)], ...
@@ -162,46 +170,46 @@ function plot_robot_pose_lite(joint_types, DH_table, O_A_i, show_rotation)
                 text(from_x_k(1) + to_x(1), from_x_k(2) + to_x(2), from_x_k(3) + to_x(3)-offset, ...
                      strcat("x", num2str(j-1)), Color = x_color, FontSize=font_size, ...
                      HorizontalAlignment="center", VerticalAlignment="middle",FontWeight="bold")
-                if show_rotation
-                    % Semicircle for highlight theta_j
-                    t = linspace(0,DH_th(j-1), 20);
-                    v_th = [];
-                    f_th = [];
-                    v_line_th = [];
-                    % Create a shape and a line for a semicircle of angle theta_j
-                    for i = 1:length(t)-1
-                        v1 = 0.7*[0 0 0];
-                        v2 = 0.7*[cos(t(i)) sin(t(i)) 0*t(i)];
-                        v3 = 0.7*[cos(t(i+1)) sin(t(i+1)) 0*t(i+1)];
-                        v_th = [v_th; v1; v2; v3];
-                        v_line_new = 0.7*[cos(t(i)) sin(t(i)) 0*t(i)];
-                        v_line_th = [v_line_th; v_line_new];
-                        f_i = [((i-1)*3)+1 ((i-1)*3)+2 ((i-1)*3)+3];
-                        f_th = [f_th; f_i];
-                    end
-                    v_line_new = 0.7*[cos(t(end)) sin(t(end)) 0*t(end)];
-                    v_line_th = [v_line_th; v_line_new];
-                    % Estrapolate the rotation and position of the reference 
-                    % frame RF_j-1 of the joint wrt the world frame
-                    rot = O_A_i(1:3, (j-2)*4 + 1:(j-2)*4 + 3);
-                    tran = O_A_i(1:3, (j-2)*4 + 4);
-                    % Rotate and translate the semicircle
-                    v_th = double(vpa(simplify(rot*v_th' + tran), 4));
-                    v_th = v_th';
-                    v_line_th = double(vpa(simplify(rot*v_line_th' + tran), 4));
-                    v_line_th = v_line_th';
-                    % Plot the semicircle shape with
-                    patch(Faces = f_th, Vertices = v_th, FaceColor = x_color, EdgeColor='none', FaceAlpha=face_alpha/2);
-                    % Plot the text of theta_j with its value in the semicircle
-                    text((joint_pos(1, j-1) + 0.7*joint_x(1, j-1) + from_x_k(1) + 0.7*to_x(1))/2, ...
-                         (joint_pos(2, j-1) + 0.7*joint_x(2, j-1) + from_x_k(2) + 0.7*to_x(2))/2, ...
-                         (joint_pos(3, j-1) + 0.7*joint_x(3, j-1) + from_x_k(3) + 0.7*to_x(3))/2, ...
-                         strcat("Θ", num2str(j-1), "=", num2str(double(DH_th(j-1)))), Color=x_color, FontSize=font_size, ...
-                         HorizontalAlignment="center", VerticalAlignment="middle",FontWeight="bold")
-                    % Plot the line on the border of the semicircle
-                    line(v_line_th(1:end-1,1), v_line_th(1:end-1,2), v_line_th(1:end-1,3), ...
-                          Color = x_color, LineWidth=line_width, LineStyle="--")
-                    % Plot the head of the arrow witha cone
+%                 if show_rotation
+%                     % Semicircle for highlight theta_j
+%                     t = linspace(0,DH_th(j-1), 20);
+%                     v_th = [];
+%                     f_th = [];
+%                     v_line_th = [];
+%                     % Create a shape and a line for a semicircle of angle theta_j
+%                     for i = 1:length(t)-1
+%                         v1 = 0.7*[0 0 0];
+%                         v2 = 0.7*[cos(t(i)) sin(t(i)) 0*t(i)];
+%                         v3 = 0.7*[cos(t(i+1)) sin(t(i+1)) 0*t(i+1)];
+%                         v_th = [v_th; v1; v2; v3];
+%                         v_line_new = 0.7*[cos(t(i)) sin(t(i)) 0*t(i)];
+%                         v_line_th = [v_line_th; v_line_new];
+%                         f_i = [((i-1)*3)+1 ((i-1)*3)+2 ((i-1)*3)+3];
+%                         f_th = [f_th; f_i];
+%                     end
+%                     v_line_new = 0.7*[cos(t(end)) sin(t(end)) 0*t(end)];
+%                     v_line_th = [v_line_th; v_line_new];
+%                     % Estrapolate the rotation and position of the reference 
+%                     % frame RF_j-1 of the joint wrt the world frame
+%                     rot = O_A_i(1:3, (j-2)*4 + 1:(j-2)*4 + 3);
+%                     tran = O_A_i(1:3, (j-2)*4 + 4);
+%                     % Rotate and translate the semicircle
+%                     v_th = double(vpa(simplify(rot*v_th' + tran), 4));
+%                     v_th = v_th';
+%                     v_line_th = double(vpa(simplify(rot*v_line_th' + tran), 4));
+%                     v_line_th = v_line_th';
+%                     % Plot the semicircle shape with
+%                     patch(Faces = f_th, Vertices = v_th, FaceColor = x_color, EdgeColor='none', FaceAlpha=face_alpha/2);
+%                     % Plot the text of theta_j with its value in the semicircle
+%                     text((joint_pos(1, j-1) + 0.7*joint_x(1, j-1) + from_x_k(1) + 0.7*to_x(1))/2, ...
+%                          (joint_pos(2, j-1) + 0.7*joint_x(2, j-1) + from_x_k(2) + 0.7*to_x(2))/2, ...
+%                          (joint_pos(3, j-1) + 0.7*joint_x(3, j-1) + from_x_k(3) + 0.7*to_x(3))/2, ...
+%                          strcat("Θ", num2str(j-1), "=", num2str(double(DH_th(j-1)))), Color=x_color, FontSize=font_size, ...
+%                          HorizontalAlignment="center", VerticalAlignment="middle",FontWeight="bold")
+%                     % Plot the line on the border of the semicircle
+%                     line(v_line_th(1:end-1,1), v_line_th(1:end-1,2), v_line_th(1:end-1,3), ...
+%                           Color = x_color, LineWidth=line_width, LineStyle="--")
+%                     % Plot the head of the arrow witha cone
 %                     from = v_line_th(end-1,:);
 %                     to = v_line_th(end,:);
 %                     [x_c, y_c, z_c] = cylinder2P([0.03 0], 7, from, to);
@@ -209,7 +217,7 @@ function plot_robot_pose_lite(joint_types, DH_table, O_A_i, show_rotation)
 %                     y_c = double(y_c);
 %                     z_c = double(z_c);
                     %surface(x_c, y_c, z_c, FaceColor=x_color, EdgeColor='none')
-                end
+%                 end
 
 
                 % Handle Alpha_j
@@ -229,46 +237,46 @@ function plot_robot_pose_lite(joint_types, DH_table, O_A_i, show_rotation)
                      strcat("z", num2str(j-2)), Color = z_color, FontSize=font_size,...
                      HorizontalAlignment="center", VerticalAlignment="middle",FontWeight="bold")
                 
-                if show_rotation
-                    % Semicircle for highlight alpha_j
-                    t = linspace(0,DH_al(j-1), 20);
-                    v_al = [];
-                    f_al = [];
-                    v_line_al = [];
-                    % Create a shape and a line for a semicircle of angle alpha_j
-                    for i = 1:length(t)-1
-                        v1 = 0.7*[0 0 0];
-                        v2 = 0.7*[0*t(i) sin(t(i)) cos(t(i))];
-                        v3 = 0.7*[0*t(i+1) sin(t(i+1)) cos(t(i+1))];
-                        v_al = [v_al; v1; v2; v3];
-                        v_line_new = 0.7*[0*t(i) sin(t(i)) cos(t(i))];
-                        v_line_al = [v_line_al; v_line_new];
-                        f_i = [((i-1)*3)+1 ((i-1)*3)+2 ((i-1)*3)+3];
-                        f_al = [f_al; f_i];
-                    end
-                    v_line_new = 0.7*[0*t(end) sin(t(end)) cos(t(end))];
-                    v_line_al = [v_line_al; v_line_new];
-                    % Estrapolate the rotation and position of the reference 
-                    % frame RF_j of the joint wrt the world frame
-                    rot = O_A_i(1:3, (j-1)*4 + 1:(j-1)*4 + 3);
-                    tran = O_A_i(1:3, (j-1)*4 + 4);
-                    % Rotate and translate the semicircle
-                    v_al = double(vpa(simplify(rot*v_al' + tran), 4));
-                    v_al = v_al';
-                    v_line_al = double(vpa(simplify(rot*v_line_al' + tran), 4));
-                    v_line_al = v_line_al';
-                    % Plot the semicircle shape with
-                    patch(Faces = f_al, Vertices = v_al, FaceColor = z_color, EdgeColor='none', FaceAlpha=face_alpha/2);
-                    % Plot the text of alpha_j with its value in the semicircle
-                    text((joint_pos(1, j) + 0.7*joint_z(1, j) + joint_pos(1, j) + 0.7*to_z_k(1))/2, ...
-                         (joint_pos(2, j) + 0.7*joint_z(2, j) + joint_pos(2, j) + 0.7*to_z_k(2))/2, ...
-                         (joint_pos(3, j) + 0.7*joint_z(3, j) + joint_pos(3, j) + 0.7*to_z_k(3))/2, ...
-                         strcat("α", num2str(j-1), "=", num2str(double(DH_al(j-1)))), Color=z_color, FontSize=font_size, ...
-                         HorizontalAlignment="center", VerticalAlignment="middle",FontWeight="bold")
-                    % Plot the line on the border of the semicircle
-                    line(v_line_al(2:end,1), v_line_al(2:end,2), v_line_al(2:end,3), ...
-                          Color = z_color, LineWidth=line_width, LineStyle="--")
-                    % Plot the head of the arrow witha cone
+%                 if show_rotation
+%                     % Semicircle for highlight alpha_j
+%                     t = linspace(0,DH_al(j-1), 20);
+%                     v_al = [];
+%                     f_al = [];
+%                     v_line_al = [];
+%                     % Create a shape and a line for a semicircle of angle alpha_j
+%                     for i = 1:length(t)-1
+%                         v1 = 0.7*[0 0 0];
+%                         v2 = 0.7*[0*t(i) sin(t(i)) cos(t(i))];
+%                         v3 = 0.7*[0*t(i+1) sin(t(i+1)) cos(t(i+1))];
+%                         v_al = [v_al; v1; v2; v3];
+%                         v_line_new = 0.7*[0*t(i) sin(t(i)) cos(t(i))];
+%                         v_line_al = [v_line_al; v_line_new];
+%                         f_i = [((i-1)*3)+1 ((i-1)*3)+2 ((i-1)*3)+3];
+%                         f_al = [f_al; f_i];
+%                     end
+%                     v_line_new = 0.7*[0*t(end) sin(t(end)) cos(t(end))];
+%                     v_line_al = [v_line_al; v_line_new];
+%                     % Estrapolate the rotation and position of the reference 
+%                     % frame RF_j of the joint wrt the world frame
+%                     rot = O_A_i(1:3, (j-1)*4 + 1:(j-1)*4 + 3);
+%                     tran = O_A_i(1:3, (j-1)*4 + 4);
+%                     % Rotate and translate the semicircle
+%                     v_al = double(vpa(simplify(rot*v_al' + tran), 4));
+%                     v_al = v_al';
+%                     v_line_al = double(vpa(simplify(rot*v_line_al' + tran), 4));
+%                     v_line_al = v_line_al';
+%                     % Plot the semicircle shape with
+%                     patch(Faces = f_al, Vertices = v_al, FaceColor = z_color, EdgeColor='none', FaceAlpha=face_alpha/2);
+%                     % Plot the text of alpha_j with its value in the semicircle
+%                     text((joint_pos(1, j) + 0.7*joint_z(1, j) + joint_pos(1, j) + 0.7*to_z_k(1))/2, ...
+%                          (joint_pos(2, j) + 0.7*joint_z(2, j) + joint_pos(2, j) + 0.7*to_z_k(2))/2, ...
+%                          (joint_pos(3, j) + 0.7*joint_z(3, j) + joint_pos(3, j) + 0.7*to_z_k(3))/2, ...
+%                          strcat("α", num2str(j-1), "=", num2str(double(DH_al(j-1)))), Color=z_color, FontSize=font_size, ...
+%                          HorizontalAlignment="center", VerticalAlignment="middle",FontWeight="bold")
+%                     % Plot the line on the border of the semicircle
+%                     line(v_line_al(2:end,1), v_line_al(2:end,2), v_line_al(2:end,3), ...
+%                           Color = z_color, LineWidth=line_width, LineStyle="--")
+%                     % Plot the head of the arrow witha cone
 %                     from = v_line_al(2,:);
 %                     to = v_line_al(1,:);
 %                     [x_c, y_c, z_c] = cylinder2P([0.03 0], 7, from, to);
@@ -276,56 +284,61 @@ function plot_robot_pose_lite(joint_types, DH_table, O_A_i, show_rotation)
 %                     y_c = double(y_c);
 %                     z_c = double(z_c);
                     %surface(x_c, y_c, z_c, FaceColor=z_color, EdgeColor='none')
-                end
+%                 end
             end
             % JOINT PART
             if joint_types(j) == "ee"
                 % In case of the end effector TODO
-%                 from1 = joint_pos(:, j) - r_revolute*joint_y(:, j)*1.5;
-%                 to1 = joint_pos(:, j) + r_revolute*joint_y(:, j)*1.5;
+                from1 = joint_pos(:, j) - r_revolute*joint_y(:, j)*1.5;
+                to1 = joint_pos(:, j) + r_revolute*joint_y(:, j)*1.5;
 %                 radii = radii_ee;
 %                 [x_c, y_c, z_c] = cylinder2P(radii, 20, from1', to1');
 %                 x_c = double(x_c);
 %                 y_c = double(y_c);
 %                 z_c = double(z_c);
                 %surface(x_c, y_c, z_c, FaceColor=joint_color, EdgeColor='none', FaceAlpha=face_alpha)
+                line([from1(1) to1(1)], [from1(2) to1(2)], [from1(3) to1(3)], Color = joint_color, LineWidth = line_width*3)
 
-%                 from2 = from1;
-%                 to2 = from1 + r_revolute*joint_z(:, j)*1.5;
+                from2 = from1;
+                to2 = from1 + r_revolute*joint_z(:, j)*1.5;
 %                 [x_c, y_c, z_c] = cylinder2P(radii, 20, from2', to2');
 %                 x_c = double(x_c);
 %                 y_c = double(y_c);
 %                 z_c = double(z_c);
                 %surface(x_c, y_c, z_c, FaceColor=[.9 .9 .9], EdgeColor='none', FaceAlpha=face_alpha)
+                line([from2(1) to2(1)], [from2(2) to2(2)], [from2(3) to2(3)], Color = joint_color, LineWidth = line_width*3)
 
-%                 from3 = to1;
-%                 to3 = to1 + r_revolute*joint_z(:, j)*1.5;
+                from3 = to1;
+                to3 = to1 + r_revolute*joint_z(:, j)*1.5;
 %                 [x_c, y_c, z_c] = cylinder2P(radii, 20, from3', to3');
 %                 x_c = double(x_c);
 %                 y_c = double(y_c);
 %                 z_c = double(z_c);
                 %surface(x_c, y_c, z_c, FaceColor=joint_color, EdgeColor='none', FaceAlpha=face_alpha)
+                line([from3(1) to3(1)], [from3(2) to3(2)], [from3(3) to3(3)], Color = joint_color, LineWidth = line_width*3)
             else
                 % The revolute joint and the base of a prismatic joint
-%                 from = joint_pos(:, j) - r_revolute*joint_z(:, j);
-%                 to = joint_pos(:, j) + r_revolute*joint_z(:, j);
+                from = joint_pos(:, j) - r_revolute*joint_z(:, j);
+                to = joint_pos(:, j) + r_revolute*joint_z(:, j);
 %                 radii = radii_revolute;
 %                 [x_c, y_c, z_c] = cylinder2P(radii, 20, from', to');
 %                 x_c = double(x_c);
 %                 y_c = double(y_c);
 %                 z_c = double(z_c);
                 %surface(x_c, y_c, z_c, FaceColor=joint_color, EdgeColor='none', FaceAlpha=face_alpha)
+%                 line([from(1) to(1)], [from(2) to(2)], [from(3) to(3)], Color = joint_color, LineWidth = line_width*3)
     
                 if joint_types(j) == "p"
                     % The second part of a prismatic joint
-%                     from = joint_pos(:, j) - r_revolute*joint_z(:, j)*1.5;
-%                     to = joint_pos(:, j) + r_revolute*joint_z(:, j)*1.5;
+                    from = joint_pos(:, j) - r_revolute*joint_z(:, j)*1.5;
+                    to = joint_pos(:, j) + r_revolute*joint_z(:, j)*1.5;
 %                     radii = radii_prismatic;
 %                     [x_c, y_c, z_c] = cylinder2P(radii, 7, from', to');
 %                     x_c = double(x_c);
 %                     y_c = double(y_c);
 %                     z_c = double(z_c);
                     %surface(x_c, y_c, z_c, FaceColor=joint_color, EdgeColor='none', FaceAlpha=face_alpha)
+%                     line([from(1) to(1)], [from(2) to(2)], [from(3) to(3)], Color = joint_color, LineWidth = line_width*3)
                 end
             end
             
