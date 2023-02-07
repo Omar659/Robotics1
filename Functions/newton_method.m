@@ -1,8 +1,8 @@
-function q_history = newton_method(fr, q_0, r_d, q, k, eps, eps_q, q_des, sing_closeness, fig_speed)
+function [q_history, norm_error_history, det_J_history] = newton_method(fr, q_0, r_d, q, k, eps, eps_q, q_des, sing_closeness, fig_speed)
     % newton_method - Compute the Newton method to reach a specific 
     % desired configuration
     %
-    % sintax: q_history = newton_method(fr, q_0, r_d, q, k, eps, eps_q, q_des, sing_closeness, fig_speed)
+    % [q_history, norm_error_history, det_J_history] = newton_method(fr, q_0, r_d, q, k, eps, eps_q, q_des, sing_closeness, fig_speed)
     %
     % input:
     %   fr - Cartesian position of the EE in symbols
@@ -18,16 +18,20 @@ function q_history = newton_method(fr, q_0, r_d, q, k, eps, eps_q, q_des, sing_c
     %   q_des - desired configuration
     %   sing_closness - Used as stopping criteria. If the determinant is lower
     %   than 10^-sing_closness the algorithm stop with a failure
-    %   fig_speed - amimation speed
+    %   fig_speed - amimation speed, if 0 no animation, if < 0 no graph
+    %   plot
     %
     % output:
     %   q_history - All configuration during the algorithm
+    %   norm_error_history - All norm error during the algorithm
+    %   det_J_history - All jacobian's determinant during the algorithm
     
     disp('NEWTON METHOD')
     q_k = q_0;
     q_history = [];
     error_history = [];
     norm_error_history = [];
+    det_J_history = [];
     J = jacobian(fr, q);
     J_inv = inv(J);
     disp('STEP0')
@@ -37,12 +41,14 @@ function q_history = newton_method(fr, q_0, r_d, q, k, eps, eps_q, q_des, sing_c
         q_history(:, end + 1) = q_k;
         fr_q_k = fr;
         J_inv_k = J_inv;
+        J_k = J;
         for i = 1:length(q_k)
             fr_q_k = subs(fr_q_k, {q(i)}, {q_k(i)});
-            J_inv_k = subs(J_inv_k, {q(i)}, {q_k(i)});            
+            J_inv_k = subs(J_inv_k, {q(i)}, {q_k(i)});  
+            J_k = subs(J_k, {q(i)}, {q_k(i)});            
         end
-
-        if det(J_inv_k) <= 10^-sing_closeness 
+        det_J_history = [det_J_history abs(det(J_k))];
+        if abs(det(J_k)) <= 10^(-sing_closeness)
             disp('SINGULARITY, OPERATION ABORTED')
             sing = true;
             break
@@ -65,7 +71,7 @@ function q_history = newton_method(fr, q_0, r_d, q, k, eps, eps_q, q_des, sing_c
         disp(strcat('STEP', num2str(ep)))
         disp(q_k)
     end
-    if ~sing
+    if ~sing && fig_speed>=0
         subplot(2,4,1);
         plot_errs_joints(norm_error_history, fig_speed, 'Newton method', 'norm of Cartesian position error [m]')
     

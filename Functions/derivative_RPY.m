@@ -2,7 +2,7 @@ function T_RPY = derivative_RPY(ax1, ax2, ax3, syms)
     % derivative_RPY - Compute one of the 12 combinations of the derivative 
     % with respect the time of the rotation matrix Roll-Pitch-Yaw
     %
-    % T_RPY = derivative_RPY(syms)
+    % T_RPY = derivative_RPY(ax1, ax2, ax3, syms)
     %
     % input:
     %   ax1 - Index of first rotation, fixed axis
