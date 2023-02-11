@@ -280,7 +280,7 @@ function plot_robot_pose(joint_types, DH_table, O_A_i, show_rotation)
             end
             % JOINT PART
             if joint_types(j) == "ee"
-                % In case of the end effector TODO
+                % In case of the end effector
                 from1 = joint_pos(:, j) - r_revolute*joint_y(:, j)*1.5;
                 to1 = joint_pos(:, j) + r_revolute*joint_y(:, j)*1.5;
                 radii = radii_ee;
