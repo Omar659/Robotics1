@@ -30,6 +30,6 @@ function r = compute_r(R,t)
     % Standard solution
     else
         RR = R - R';
-        r = [RR(3,2) RR(1,3) RR(2,1)]'/2*sin(t);
+        r = (1/(2*sin(t)))*[RR(3,2); RR(1,3); RR(2,1)];
     end
 end

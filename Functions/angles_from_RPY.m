@@ -18,5 +18,5 @@ function [sol1, sol2] = angles_from_RPY(R)
     psi2 = atan2(R(3,2)/cos(theta2), R(3,3)/cos(theta2));
     sol1 = [psi1; theta1; phi1];
     sol2 = [psi2; theta2; phi2];
-    disp("Angles order: psi (yaw), theta (pitch), phi (roll)")
+    disp("Angles order: 1:psi (yaw), 2:theta (pitch), 3:phi (roll)")
 end

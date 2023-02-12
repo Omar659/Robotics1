@@ -1,5 +1,5 @@
-addpath("Functions/") % Linux
-% addpath("Functions\") % Windows
+% addpath("Functions/") % Linux
+addpath("Functions\") % Windows
 
 %%
 clear all
@@ -202,15 +202,109 @@ grid on
 
 
 
+%%
+clear all
+close all
+clc
+T1 = 2.5;
+T2 = 1;
+T = T1+T2;
+R1 = [0 -sqrt(2)/2 sqrt(2)/2;
+      1 0 0;
+      0 sqrt(2)/2 sqrt(2)/2];
+R2 = [sqrt(2)/2 1/2 -1/2;
+      0 -sqrt(2)/2 -sqrt(2)/2;
+      -sqrt(2)/2 1/2 -1/2];
+Rvia = [sqrt(6)/4 sqrt(2)/4 -sqrt(2)/2;
+        -sqrt(6)/4 -sqrt(2)/4 -sqrt(2)/2;
+        -1/2 sqrt(3)/2 0];
+
+[ang1, sol1] = angles_from_RPY(R1);
+[ang2, sol2] = angles_from_RPY(R2);
+[ang_via, sol_via] = angles_from_RPY(Rvia);
+ang1 = [ang1(3); ang1(2); ang1(1)];
+ang2 = [ang2(3); ang2(2); ang2(1)];
+ang_via = [ang_via(3); ang_via(2); ang_via(1)];
+
+
+% compute_spline(5, [sym("h1"); sym("h2"); sym("h3"); sym("h4"); sym("h5")], [sym("q1"); sym("q2"); sym("q3"); sym("q4"); sym("q5"); sym("q6")], [sym("v1"), sym("v2"), sym("v3"), sym("v4"), sym("v5"), sym("v6")])
+% compute_spline(4, [sym("h1"); sym("h2"); sym("h3"); sym("h4")], [sym("q1"); sym("q2"); sym("q3"); sym("q4"); sym("q5")], [sym("v1"), sym("v2"), sym("v3"), sym("v4"), sym("v5")])
+% compute_spline(3, [sym("h1"); sym("h2"); sym("h3")], [sym("q1"); sym("q2"); sym("q3"); sym("q4")], [sym("v1"), sym("v2"), sym("v3"), sym("v4")])
+% compute_spline(2, [sym("h1"); sym("h2")], [sym("q1"); sym("q2"); sym("q3")], [sym("v1"), sym("v2"), sym("v3")])
+% compute_spline(2, [sym("T1"); sym("T2")], [sym("q1"); sym("q2"); sym("q3")], [0, sym("v2"), 0])
+[th1, thd1, thdd1] = compute_spline(2, [T1; T2], [ang1(1); ang_via(1); ang2(1)], [0, sym("v2"), 0]);
+[th2, thd2, thdd2] = compute_spline(2, [T1; T2], [ang1(2); ang_via(2); ang2(2)], [0, sym("v2"), 0]);
+[th3, thd3, thdd3] = compute_spline(2, [T1; T2], [ang1(3); ang_via(3); ang2(3)], [0, sym("v2"), 0]);
+
+syms t real
+th1 = vpa(th1, 4);
+th2 = vpa(th2, 4);
+th3 = vpa(th3, 4);
+thd1 = vpa(thd1, 4);
+thd2 = vpa(thd2, 4);
+thd3 = vpa(thd3, 4);
+thdd1 = vpa(thdd1, 4);
+thdd2 = vpa(thdd2, 4);
+thdd3 = vpa(thdd3, 4);
+
+xA = linspace(0, T1, 100);
+xB = linspace(T1, T, 100);
+
+P_A = subs(thdd1(1), {t}, {xA});
+P_B = subs(thdd1(2), {t}, {xB});
+
+figure(1)
+hold on
+    plot(xA, P_A)
+    plot(xB, P_B)
+hold off
+grid on
+
+P_A = subs(thdd2(1), {t}, {xA});
+P_B = subs(thdd2(2), {t}, {xB});
+
+figure(2)
+hold on
+    plot(xA, P_A)
+    plot(xB, P_B)
+hold off
+grid on
+
+P_A = subs(thdd3(1), {t}, {xA});
+P_B = subs(thdd3(2), {t}, {xB});
+
+figure(3)
+hold on
+    plot(xA, P_A)
+    plot(xB, P_B)
+hold off
+grid on
 
 
 
+%%
+clear all
+close all
+clc
 
+syms r s h t real
+fr = [r*cos(s);r*sin(s);h*s];
 
+R = rotation_around_r([1 0 0], -pi/2);
+fr1 = [0;0;r] + R*fr;
+fr2 = [0;0;r] + [r*cos(s); h*s; r*sin(s)];
 
-
-
-
+x = linspace(0, 1, 100);
+fr1 = subs(fr1, {s, r, h}, {4*pi*t, 0.4, 0.3});
+fr1 = subs(fr1, {t}, {x});
+fr2 = subs(fr2, {s, r, h}, {4*pi*t, 0.4, 0.3});
+fr2 = subs(fr2, {t}, {x});
+view(3)
+hold on
+% plot3(fr1(1, :), fr1(2, :), fr1(3, :))
+plot3(fr2(1, :), fr2(2, :), fr2(3, :))
+hold off
+grid on
 
 
 
