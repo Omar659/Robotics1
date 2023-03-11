@@ -37,7 +37,7 @@ DH_table = vpa(DH_table,4);
 figure(1);
 clf
 daspect([1 1 1])
-plot_robot_pose_lite(joint_types, DH_table, O_A_i, false)
+plot_robot_pose(joint_types, DH_table, O_A_i, false)
 
 %%
 clear all

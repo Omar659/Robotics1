@@ -41,3 +41,45 @@ disp(t_T_e)
 t_p_te = t_T_e(1:3, 4);
 disp("Then the last row (first three element) is the position of the end effector wrt the table")
 disp(t_p_te)
+
+syms d1 q1 q2 q3 q1_d q2_d q3_d a3 real
+DH_table = [0 pi/2 d1 q1;
+            0 pi/2 q2 pi/2;
+            a3 0 0 q3]
+
+A_01 = dh_matrix(DH_table(1, 1), DH_table(1, 2), DH_table(1, 3), DH_table(1, 4));
+A_12 = dh_matrix(DH_table(2, 1), DH_table(2, 2), DH_table(2, 3), DH_table(2, 4));
+A_23 = dh_matrix(DH_table(3, 1), DH_table(3, 2), DH_table(3, 3), DH_table(3, 4));
+
+p_0ee = A_01*(A_12*(A_23*[0;0;0;1]));
+
+q = [q1 q2 q3];
+q_d = [q1_d, q2_d, q3_d];
+J = jacobian(p_0ee(1:3), q);
+simplify(det(J))
+
+%q3 = 0, q3 = pi, q2 = -a3*sin(q3)
+
+J_s1 = subs(J, {q3}, {0})
+J_s2 = subs(J, {q3}, {pi})
+J_s3 = subs(J, {q2}, {-a3*sin(q3)})
+
+disp('rank')
+rank(J_s1)
+rank(J_s2)
+rank(J_s3)
+
+disp('range')
+simplify(orth(J_s1))
+simplify(orth(J_s2))
+simplify(orth(J_s3))
+
+disp('nullspace')
+null(J_s1)
+null(J_s2)
+null(J_s3)
+
+disp('nullspace transposed')
+null(J_s1')
+null(J_s2')
+null(J_s3')
