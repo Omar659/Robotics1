@@ -106,8 +106,63 @@ A = [1 1 1;
      20 12 6]
 C = [1 + (2*T)/dx;(2*T)/dx;0]
 inv(A)*[C]
+%%
+clear all
+close all
+clc
 
+DH_table = [
+            1 pi/2 2 0;
+            1 0 0 pi/4;
+            1 0 0 pi/4;
+            1 -pi/2 0 -pi/2]
 
+A_01 = dh_matrix(DH_table(1,1), DH_table(1,2), DH_table(1,3), DH_table(1,4));
+A_12 = dh_matrix(DH_table(2,1), DH_table(2,2), DH_table(2,3), DH_table(2,4));
+A_23 = dh_matrix(DH_table(3,1), DH_table(3,2), DH_table(3,3), DH_table(3,4));
+A_34 = dh_matrix(DH_table(4,1), DH_table(4,2), DH_table(4,3), DH_table(4,4));
+% A_45 = dh_matrix(DH_table(5,1), DH_table(5,2), DH_table(5,3), DH_table(5,4));
 
+A_02 = A_01*A_12;
+A_03 = A_01*A_12*A_23;
+A_04 = A_01*A_12*A_23*A_34;
+% A_05 = A_01*A_12*A_23*A_34*A_45;
 
+O_A_i = [eye(4) A_01 A_02 A_03 A_04]% A_05]
 
+joint_types = ['p','r','r','r','ee']
+
+plot_robot_pose_lite(joint_types,DH_table,O_A_i,false)
+%%
+
+clear all
+close all
+clc
+
+syms t r real
+
+p_t = [r*cos(t)^2;r*cos(t)*sin(t);0]
+p_t_p = diff(p_t, t)
+t_t = simplify(p_t_p / norm(p_t_p))
+t_t_p = diff(t_t,t)
+n_s = simplify(t_t_p/norm(t_t_p))
+
+size(t_t)
+size(n_s)
+b_s = simplify(cross(t_t,n_s))
+%%
+clear all
+close all
+clc
+
+syms alpha beta gamma real
+
+R_y = rotation_around_r([0 1 0], alpha)
+R_x = rotation_around_r([1 0 0], beta)
+R_y1= rotation_around_r([0 1 0], gamma)
+R_yx = R_y * R_x
+w = [R_yx(1,2) R_y(1,1) 0;
+     R_yx(2,2) R_y(2,1) 1;
+     R_yx(3,2) R_y(3,1) 0]
+simplify(det(w))
+%%
